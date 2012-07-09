@@ -1,0 +1,18 @@
+Switch which program a set of bindings use.
+
+Trent uses several browsers and lots of bindings, so he came up with this to switch which browser the bindings are bound to.
+
+Here is a simpler example regarding terminals:
+
+	bind c exec $XTERM
+	bind C-S-exclam exec $XTERM -e 
+	newkmap set-term
+	bind x readkey set-term
+	definekey set-term x setenv XTERM xterm
+	definekey set-term v setenv XTERM xvt
+	definekey set-term r setenv XTERM rxvt
+	definekey set-term e setenv XTERM eterm
+	# Set the default value
+        setenv XTERM xterm
+
+by twb

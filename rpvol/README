@@ -1,0 +1,38 @@
+Yet another volume control script that makes use of amixer and bar
+
+Script written by Igneous, used for changing alsa volume with the use of amixer, then displaying a visual percentage bar in ratpoison's bar with the use of dbar. This may need to be modified to work with your alsa setup. I only have a single sound card, its master control is called "Master", wave/pcm volume control is called "PCM". If yours are named differently, you'll likely need to change those values below.
+
+Here's an example of my bindings. This would set alt+1-0 to be 10%-100% (Master), ` being 0%. ctrl+1-0 would be 10%-100% (PCM), ` being 0%. Alt+-/= is increment/decrease Master by 5%.. Ctrl+-/= is increment/decrease PCM by 5%:
+
+    # Volume Bindings (Alt/Master,Ctrl/PCM)
+    # --{{
+    bind M-grave exec /home/igneous/Scripts/rpvol -m 0
+    bind M-1 exec /home/igneous/Scripts/rpvol -m 10
+    bind M-2 exec /home/igneous/Scripts/rpvol -m 20
+    bind M-3 exec /home/igneous/Scripts/rpvol -m 30
+    bind M-4 exec /home/igneous/Scripts/rpvol -m 40
+    bind M-5 exec /home/igneous/Scripts/rpvol -m 50
+    bind M-6 exec /home/igneous/Scripts/rpvol -m 60
+    bind M-7 exec /home/igneous/Scripts/rpvol -m 70
+    bind M-8 exec /home/igneous/Scripts/rpvol -m 80
+    bind M-9 exec /home/igneous/Scripts/rpvol -m 90
+    bind M-0 exec /home/igneous/Scripts/rpvol -m 100
+    bind M-minus exec /home/igneous/Scripts/rpvol -d -m 5
+    bind M-equal exec /home/igneous/Scripts/rpvol -i -m 5
+    
+    bind C-grave exec /home/igneous/Scripts/rpvol -p 0
+    bind C-1 exec /home/igneous/Scripts/rpvol -p 10
+    bind C-2 exec /home/igneous/Scripts/rpvol -p 20
+    bind C-3 exec /home/igneous/Scripts/rpvol -p 30
+    bind C-4 exec /home/igneous/Scripts/rpvol -p 40
+    bind C-5 exec /home/igneous/Scripts/rpvol -p 50
+    bind C-6 exec /home/igneous/Scripts/rpvol -p 60
+    bind C-7 exec /home/igneous/Scripts/rpvol -p 70
+    bind C-8 exec /home/igneous/Scripts/rpvol -p 80
+    bind C-9 exec /home/igneous/Scripts/rpvol -p 90
+    bind C-0 exec /home/igneous/Scripts/rpvol -p 100
+    bind C-minus exec /home/igneous/Scripts/rpvol -d -p 5
+    bind C-equal exec /home/igneous/Scripts/rpvol -i -p 5
+    # }}--
+
+by Igneous

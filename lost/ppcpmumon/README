@@ -1,0 +1,33 @@
+Battery monitor for Powerbooks running Linux (and others?)
+
+From the comments:
+
+    # ppcpmumon
+    #
+    # ratpoison battery status reporter for powerbooks running linux
+    # formats battery data from /proc and displays via an :echo
+    
+    # written by shawn boyette <sboyette@gmail.com>
+    # released into the public domain
+    #
+    # this is WorksForMe grade code :)
+    
+    # might work on other machines by specifying other locations for the
+    # @bats glob and INFO filehandle? it could also be used for other
+    # things by changing the reporting command, but other wms tend to
+    # already have battery widgets.
+    
+    # v2 - handles multiple batteries, is more compactly written
+    # v3 - "daemon", verbose modes. low-battery warning.
+    
+    # usage: ppcpmumon     report battery status
+    #        ppcpmumon -d  'daemon' mode - run in loop, reporting only when
+    #                      low battery threshhold is reached
+    #        ppcpmumon -v  force reporting of battery status (only useful to
+    #                      make daemon mode talk all the time
+    #
+    # i keep it bound to 'B' for ad hoc checking
+
+http://mdxi.collapsar.net/hacks/perl/ppcpmumon
+
+by Shawn Boyette

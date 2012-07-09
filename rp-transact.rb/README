@@ -1,0 +1,6 @@
+a Ruby library for multiple RP commands
+
+This Ruby library stocks multiple ratpoison commands and execute them at a time. It is faster than forking many RP commands.
+
+
+by rubikitch

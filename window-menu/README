@@ -1,0 +1,5 @@
+dynamically generate a ratmenu of current windows
+
+This is much better than the previous versions -- using null delimiters deals better with weirdness in titles and makes life easier. It depends on ratmenu ( http://ratpoison.wxcvbn.org/cgi-bin/wiki.pl/ratmenu )
+
+by ZedLopez

@@ -1,0 +1,9 @@
+Quick hack to get RSS feeds to use the statusbar
+
+A quick, dirty hack to show 5 headlines from an RSS-feed using ratpoison's statusbar.
+
+You will need to install wnews (http://ratpoison.wxcvbn.org/cgi-bin/wiki.pl/wnews ) for this to work.
+
+http://www.m0en.org/ratpoison/ratwnews
+
+by Anders Kraneled

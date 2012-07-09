@@ -1,0 +1,72 @@
+#!/bin/bash
+# rpvol by Igneous <bjw@onwav.com>
+# Desc: set volume and return a pretty percentage bar of the current PCM/Master volume
+# License: zlib
+
+mup() {
+	amixer -q sset Master,0 $cmd || exit 1
+
+	volume=$(amixer sget Master,0 | egrep -i "left.*db")
+	pe=${volume#*\[}
+	ratpoison -c "echo Master: $(echo ${pe%\%*} | dbar -s '=' -min 0 -max 100 -w 20)"
+	}
+
+pup() {
+      amixer -q sset PCM,0 $cmd || exit 1
+
+      volume=$(amixer sget PCM,0 | egrep -i "left.*db")
+      pe=${volume#*\[}
+      ratpoison -c "echo PCM: $(echo ${pe%\%*} | dbar -s '=' -min 0 -max 100 -w 20)"
+	}
+
+usage() {
+	echo -e "Usage: rpvol (-i,d) -[m,p] <percent> "
+	echo
+	echo -e "\e[1;33m Available Options:";tput sgr0
+	echo -e "\t -h\t this help"
+	echo -e "\t -m\t adjust Master volume to specified percentage"
+	echo -e "\t -p\t adjust PCM volume to specified percentage"
+	echo -e "\t -i\t increment the volume by n% rather than directly setting the percentage"
+	echo -e "\t -d\t decrease the volume by n% rather than directly setting the percentage"
+	echo
+	echo -e "\e[1;33m note:";tput sgr0
+	echo -e "\t obviously -i and -d cannot be used in conjunction, nor can -m and -p."
+	echo -e "\t also, -i and -d are optional whereas -m or -p are manditory."
+	}
+
+case $# in
+	2)
+	  typeset -i $2 >/dev/null 2>&1
+	  case $1 in
+ 		\-m)
+		  cmd="$2%"
+		  mup;;
+		\-p)
+		  cmd="$2%"
+		  pup;;
+	  esac;;
+	3)
+	  typeset -i $3 >/dev/null 2>&1
+	  case $1 in
+		\-i)
+		  case $2 in
+			\-m)
+			    cmd="$3%+"
+			    mup;;
+		  	\-p)
+			    cmd="$3%+"
+			    pup;;
+		  esac;;
+		\-d)
+		  case $2 in
+		  	\-m)
+ 			    cmd="$3%-"
+                          mup;;
+                  	\-p)
+                          cmd="$3%-"
+                          pup;;
+		  esac;;
+	  esac;;
+	*)
+	  usage;;
+esac

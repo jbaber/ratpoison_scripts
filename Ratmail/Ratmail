@@ -1,0 +1,68 @@
+#!/bin/bash
+
+#===============================================================
+# RATMAIL:  The no-singing, no-dancing mailchecker for Ratpoison
+#===============================================================
+
+#### Ratmail:  The one true mailchecker? Nah.
+# Version .10:  Less code, more better
+# By Door
+
+#### Dependencies.
+# (1) Ratpoison (obviously)
+# (2) BASH
+# (3) GNU Mailutils (specifically, messages)
+
+## Note:  don't forget .ratmailrc (see the wiki page)
+
+#===============================================================
+#The actual code
+#===============================================================
+
+if [ -e ~/.ratmailrc ]
+    then
+        source ~/.ratmailrc
+
+else
+    ratpoison -c "echo No ratmailrc! Where are your mailboxes???"
+
+fi
+
+while winsys=$(ps -e | grep ratpoison | wc -l)
+    [ "$winsys" != 0 ]
+    [ -e ~/.ratmailrc ]
+    do
+
+for box in $BOXES
+do
+
+prevnumber=$(cat '/home/ivy/.mutt/.'$box'.number')
+number=$(messages -q $location'/'$box)
+
+newmail=$CHECKDIR'/.newmail'
+numfile=$CHECKDIR'/.'$box'.number'
+
+diff=$(($number-$prevnumber))
+
+if [ $diff -ge 1 ]
+    then
+
+    if [ $diff -eq 1 ]
+        then
+            echo "There is $diff new message in $box" >> $newmail
+            ratpoison -c "echo $(cat $newmail)"
+            echo $number > $numfile
+    else
+         echo "There are $diff new messages in $box" >> $newmail
+         ratpoison -c "echo $(cat $newmail)"
+         echo $number > $numfile
+
+         fi
+
+fi
+
+done
+
+echo /dev/null > $newmail
+sleep $DELAY
+done

@@ -1,0 +1,85 @@
+(defun ratpoison-cyclebuffer-forward ()
+(interactive)
+(setq this-command 'cyclebuffer-forward)
+(cyclebuffer-forward)
+(ratpoison-echo-buffer-list))
+
+(defun ratpoison-cyclebuffer-backward ()
+(interactive)
+(setq this-command 'cyclebuffer-backward)
+(cyclebuffer-backward)
+(ratpoison-echo-buffer-list))
+
+;; You can use `cyclebuffer-buffer-list' to get a static list (not
+;; what you would necessarily expect!), or (buffer-list) to get a
+;; moving but disorienting list that has the current buffer on the
+;; top.
+
+;; The one problem with it is that sometimes when you kill a
+;; buffer, the wrong thing shows up in the list. I've gotten this
+;; partly taken care of.
+    
+;; Perhaps more of this should be done with some technique other than
+;; regexp replacements.
+(defun ratpoison-echo-buffer-list ()
+  (interactive)
+  (ratpoison-defbargravity "ne")
+  (let* ((blist (copy-list cyclebuffer-buffer-list))
+         (hlist. (nthcdr cyclebuffer-buffer-index
+                        blist))
+         (str (progn
+                (rplaca hlist
+                        ;; this is really not very stylish.  But what
+                        ;; it does is replace replace the symbol
+                        ;; representing the current buffer with a
+                        ;; marked up version.
+                        (intern (concat "|||"
+                                        (buffer-name (current-buffer))
+                                        "|||")))
+                ;; this outer step seems to help with duplicates after
+                ;; deleting, but I still haven't gotten rid of all of
+                ;; them.
+                (replace-regexp-in-string
+                 (concat "^ ?" (buffer-name (current-buffer)) "\n")
+                 ""
+                 (replace-regexp-in-string
+                  "||| "
+                  "|||\n "
+                  (replace-regexp-in-string 
+                   "\\\\ "
+                   " "
+                   (replace-regexp-in-string 
+                    "\\\\\\."
+                    "."
+                    (replace-regexp-in-string 
+                     "\\\\$"
+                     "\n"
+                     (replace-regexp-in-string 
+                      "^[( ]\\|)$"
+                      ""
+                      (replace-regexp-in-string
+                       "\\(#&lt;buffer \\)\\(.*?\\)\\(&gt;\\)"
+           ..            "\\2\n "
+                       (replace-regexp-in-string
+                        " #&lt;buffer  .*?&gt;"
+                        ""
+                        (format "%S" blist)))))))))))
+         (len (length str)))
+    ;; I think that this business with the substring shouldn't be
+    ;; necessary if ratpoison is doing the right thing with messages.
+    (ratpoison-echo (substring str 0 (1- len))))
+  (ratpoison-defbargravity "se"))
+
+(defun ratpoison-kill-this-buffer ()
+(interactive)
+(setq this-command 'ratpoison-cyclebuffer-backward)
+(kill-this-buffer)
+;; this avoids echoing anything having to do with "killed-buffer" but
+;; it unfortunately doesn't update the list properly
+(call-interactively 'ratpoison-echo-buffer-list))
+
+;; some sample bindings
+(global-set-key [(control super b)] 'ratpoison-cyclebuffer-backward)
+(global-set-key [(control super n)] 'ratpoison-cyclebuffer-forward)
+(global-set-key [(control super d)] 'ratpoison-kill-this-buffer)
+(global-set-key [(control super w)] 'ratpoison-echo-buffer-list)

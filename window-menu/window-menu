@@ -1,0 +1,1 @@
+ratpoison -c "windows %n\\000%c\\000%t\\000"|perl -F'\\000' -ane 'print "$F[1] $F[2]\000ratpoison -c \"select $F[0]\"\000"'|xargs -0 ratmenu 

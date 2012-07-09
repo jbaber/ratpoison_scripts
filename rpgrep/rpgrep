@@ -1,0 +1,134 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+rpgrep - make ratpoison switch to a window with a matching pattern
+
+=head1 SYNOPSIS
+
+rpgrep [pattern]
+
+=head1 DESCRIPTION
+
+A more powerful replacement for ratpoison's built-in B<select> command:
+Search for a regular expression in the title of a window managed by the
+ratpoison X11 window manager and let ratpoison switch to the next
+matching window.
+
+If called without arguments, the last search will be repeated and, if
+there are multiple windows with matching titles, the next found window
+will be switched to.
+
+The current search pattern gets stored in the ratpoison environment
+variable B<searchstring>. By this, the search can be repeated the next
+time rpgrep is being called up non-interactively.  B<searchstring> has the format
+B<pattern>-B<window number>+B<window number>+B<window number>...
+
+=head1 EXAMPLES
+
+=head2 Usage on the commandline:
+
+B<rpgrep I<foo>>
+
+Makes ratpoison switch to the first window which contains I<foo> in its
+title string.
+
+B<rpgrep>
+
+If used after B<rpgrep I<foo>>, makes ratpoison switch to the next
+window which contains I<foor> in its title string.
+
+=head2 Usage within ratpoison:
+
+B<bind z colon exec rpgrep[space]>
+
+To bind rpgrep to the ratpoison key C-t+z and enter the search pattern
+interactively on the ratpoison command prompt.
+
+B<bind Z exec rpgrep>
+
+To repeat the search and cycle through matching windows by pressing
+C-t+Z.
+
+=head1 LICENSE
+
+GNU General Public License,
+http://www.gnu.org/copyleft/gpl.html
+
+=head1 AUTHOR
+
+Florian Cramer <cantsin@zedat.fu-berlin.de> 
+
+=head1 RELEASE
+
+0.9, August 2004
+
+=cut
+
+
+# Parse & sanitize commandline argument 
+chomp $ARGV[0];
+$ARGV[0] =~ s/^[W]+$//; # delete empty string
+$ARGV[0] =~ s/;|//g;    # delete dangerous characters
+
+# We have a new search word 
+if ($ARGV[0]) {
+	$search_word = $ARGV[0]
+	}
+# We don't have a new search word
+else {
+	# Read and parse the last search word from the environment variable
+	$search_string = `ratpoison -c "getenv searchstring"`;
+	chomp $search_string;
+	if ($search_string) {
+		$search_string =~ /(.*)-([0-9\+]+)$/;
+		$search_word = $1;
+		@old_matching_windows = split (/\+/, $2);
+		}
+	# We really don't have anything to search for
+	else {
+		exit
+		}
+	}
+
+# Scan all open windows for matching titles
+@windows = split (/\n/, `ratpoison -c windows`);
+$match_counter = 0;
+foreach $window(@windows) {
+	if ($window =~ /$search_word/i) {
+		# extract the window number from the ratpoison title string
+		$window_number = $window;
+		$window_number =~ s/^([0-9]+).*/\1/;
+		# push the number of the matching window into the array
+		# @matching_windows
+		$matching_windows[$match_counter] = $window_number;
+		$match_counter++;
+		}
+	}
+
+# Are we repeating a previous search and want to go to the next matching
+# window?
+if ($search_string) {
+	# If we are repeating an old search, and the window layout
+	# hasn't changed, honor the stored window layout
+	if (sort(@old_matching_windows) eq sort(@matching_windows)) {
+		@matching_windows = @old_matching_windows;
+		}
+	# Are we about to select the same window as last time?
+	if ($old_matching_windows[0] == $matching_windows[0]) {
+		# reorder the window stack so that the second element
+		# moves to the first place
+		$matching_windows[$#matching_windows+1] = $matching_windows[0];
+		shift(@matching_windows);
+		}
+	}
+
+# So we have found something. We tell ratpoison to switch to the matching
+# window and remember the search result
+if (@matching_windows) {
+	# Save the search result into ratpoison environment variable
+	$search_string = $search_word . '-' . join ('+', @matching_windows);
+	`ratpoison -c "setenv searchstring $search_string"`;
+	# Let ratpoison select the matching window
+	`ratpoison -c \"select $matching_windows[0]\"`;
+	}

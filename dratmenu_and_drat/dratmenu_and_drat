@@ -1,0 +1,11 @@
+#!/usr/bin/env perl
+my $class=shift;
+my $command ||= lc $class;
+my $current = `ratpoison -c "info %n"`;
+my @windows = grep { $current != $_->[2]}
+              map { [split /\\000/] }
+              grep { /^$class\\000/i }
+              split /\n/, `ratpoison -c "windows %c\\000%t\\000%n"`;
+exec qq{ratpoison -c "select $windows[0][2]"} if @windows == 1;
+open(my $ph, "|xargs -0 ratmenu") or die "can't open pipeline: $!";
+print $ph qq{$_->[1]\000ratpoison -c "select $_->[2]"\000} for (@windows);

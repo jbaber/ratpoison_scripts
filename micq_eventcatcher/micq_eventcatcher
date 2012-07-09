@@ -1,0 +1,58 @@
+#!/home/stp03/bkhl/opt/pdksh/bin/sh
+
+# The IM type, currently only "icq".
+IM_TYPE="$1"
+
+# The UIN of the contact this event relates to, or 0.
+UIN="$2"
+
+# The nick of the contact this events to relates to, or the empty string.
+NICK="$3"
+
+# The string "global".
+GLOBAL="$4"
+
+# The type of this event, which can be "msg", "on", "off", "beep" or
+# "status", where "on" and "off" are for oncoming and offgoing
+# contacts. This list may not be exhaustive.
+EVENT="$5"
+
+# For messages, the message type, for offgoing contacts, the previous
+# status, and for oncoming contacts or status changes, the new status,
+# otherwise 0.
+
+if [ "$EVENT" = "msg" ]; then
+    MSG_TYPE="$6"
+elif [ "$EVENT" = "off" ]; then
+    PREV_STATUS="$6"
+else
+    STATUS="$6"
+fi
+
+# The text of the message. Note that for security reasons, single
+# quotes may be replaced by double quotes, and the message text may be
+# truncated.
+MESSAGE="$7"
+
+# Make echo go to ratpoison.
+function echo {
+    ratpoison -c "echo ICQ: $@"
+}
+
+
+# Only try to notify if we're in X.
+[ -z "$DISPLAY" ] &amp;&amp; exit
+
+
+# Set $NICK to UIN if empty.
+[ -z "$NICK" -a ! "$UIN" = "0" ] &amp;&amp; NICK="$UIN"
+
+# Send the appropriate messages.
+case $5 in
+    msg)
+        [ -n "$NICK" ] &amp;&amp; echo "Message from $NICK: $MESSAGE" || echo "Message: $MESSAGE"
+        ;;
+    on)
+        [ -n "$NICK" ] &amp;&amp; echo "$NICK is online"
+        ;;
+esac

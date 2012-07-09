@@ -1,0 +1,11 @@
+#!/bin/ratpoison equivalent.
+
+See also BangPatch http://ratpoison.wxcvbn.org/cgi-bin/wiki.pl/BangPatch
+
+See also contrib/rpbatch.pl in the source package.
+
+Putting #!/usr/bin/ratpoison at the start of a ratpoison script does not work, because ratpoison does not examine stdin. This is an alternative:
+
+FH is a pseudo-unique filename based on time, process ID and user ID. There may be a better way to get unique filenames on your system.
+
+by twb

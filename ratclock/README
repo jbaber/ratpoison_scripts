@@ -1,0 +1,5 @@
+Show ticking clock in bar.
+
+This code performs some acrobatics which allow you to turn a ticking clock in the RP message bar on and off from within Emacs. Further acrobatics would be needed to make it possible to do this directly from RP. Eventually it might be fun to extend ratclock into ratlock -- a simplified variant of xlock. Right now it just provides a clock and one other fun screensaver-type amusement.
+
+by jcorneli

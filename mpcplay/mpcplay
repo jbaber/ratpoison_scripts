@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# set your working directory
+$DIR="~/ratpoison-scripts"
+
+# get the track number
+echo "ITEM=\`mpc playlist | sed '/>/!d' | awk '{ print \$1 }' | sed -e 's/>//' -e 's/)//'\`" > $DIR/.plsdump
+
+# add ratmen invocation
+echo "ratmen -d?? --title \"Playlist\" --foreground beige --background gray33 -i \$ITEM \\" >> $DIR/.plsdump
+
+# get the current playlist
+mpc playlist | \
+
+# discard track numbers from the titles,  and add the ratmen command "??mpc play <track number>"
+# for this function, thanks to http://www.computing.net/unix/wwwboard/forum/7524.html
+awk ' {
+for (i=2; i<=NF; i++)
+printf("%s ",$i)
+print("??mpc play", $1)
+} '  | \
+
+# remove useless characters, add double quotes to each argument replacing line breaks with escapes 
+sed -e 's/)//g' -e 's/>//' -e 's/\(.*\)/" & " \\/g' >> $DIR/.plsdump
+
+# execute the script created
+chmod +x "$DIR/.plsdump"
+exec "$DIR/.plsdump"

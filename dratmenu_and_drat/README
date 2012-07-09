@@ -1,0 +1,13 @@
+use dmenu or ratmenu to select among existing windows
+
+dratmenu presents a dmenu of the application classes of open windows and pipes your selection to drat (well, xargs drat.)
+
+    #!/bin/bash
+    # dratmenu
+    ratpoison -c "windows %c"|sort|uniq|dmenu -i|xargs drat
+
+drat takes an application class. If there's one window with that class, it selects it. If there are two windows and the current window is one of them, it selects the other. Otherwise, it presents a ratmenu of the open windows of that class (omitting the current window if it's of that class) which selects what the user chooses.
+
+drat can be useful without dratmenu if you want to select among a given class.
+
+by ZedLopez

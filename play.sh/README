@@ -1,0 +1,14 @@
+Play music via ratpoison
+
+quick hack to play a regex-generated playlist from ratpoison, pause/resume, stop and next needs mplayer
+
+bindings:
+bind P exec ( .ratpoison/play.sh ; exit 0 ) #play
+bind n exec ( killall mplayer ; exit 0 ) #next
+bind h exec killall -STOP mplayer #halt
+bind g exec killall -CONT mplayer #go
+bind d exec killall play.sh #destroy :)
+
+
+
+by ecraven

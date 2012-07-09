@@ -1,0 +1,12 @@
+Undo frame actions like :split.
+
+History
+
+This was first implemented in shell script by ??. Then it was implemented as a patch by twb. Then it was merged into the CVS head, where it can be found today.
+How It Works
+
+Whenever you perform a command that changes the frame list, ratpoison first pushes ([[fdump?]]s) the current frame list to an internal stack. When you call :undo, ratpoison pops an element of that stack and passes it to [[frestore?]].
+
+The stack of frame lists is not infinite. If the stack is full and a push is requested, the stack discards the oldest element until it can accomodate a new element.
+
+by codswallop

@@ -1,0 +1,24 @@
+Gnome-session equivalent.
+
+Here are some one-liners to restart programs. They have been tested with bash and POSIX sh (dash).
+
+doforever.sh dountil.sh xdoforever.sh xdountil.sh
+
+(FIXME: Unfortunately these links doesn't seem to exist any more (404). Does anyone have alternative links to these scripts? A Readme in the root directory says they are moved to http://twb.ath.cx/~twb/src/, but I can not find them there either.)
+
+The latter pair use XDialog to make a popup window.
+
+Notes:
+
+    exec prevents the buildup of wrapper processes.
+    sleep relaxes hysterisis with e.g. /bin/false.
+    Xdialog can be replaced with Zenity or GDialog. Gdialog seems to be the fastest.
+
+Downdate
+
+Here are (faster?) versions that are unsafe if the command fails instantly, such as /bin/false.
+
+    $@ && exec $0 $@    #Always restart.
+    $@ || exec $0 $@    #Restart if cmd fails.
+
+by twb

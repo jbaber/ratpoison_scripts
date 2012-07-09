@@ -1,0 +1,166 @@
+;;; ratclock.el -- clock and amusements for ratpoison bar
+    
+    ;; Copyright (C) 2004 Joe Corneli <jcorneli@math.utexas.edu>
+    
+    ;; Time-stamp: <jac -- Sun Oct 10 21:27:53 CDT 2004>
+    
+    ;; This file is not part of GNU Emacs, but it is distributed under
+    ;; the same terms as GNU Emacs.
+    
+    ;; GNU Emacs is free software; you can redistribute it and/or modify
+    ;; it under the terms of the GNU General Public License as published
+    ;; by the Free Software Foundation; either version 2, or (at your
+    ;; option) any later version.
+    
+    ;; GNU Emacs is distributed in the hope that it will be useful,
+    ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ;; GNU General Public License for more details.
+    
+    ;; You should have received a copy of the GNU General Public License
+    ;; along with GNU Emacs; see the file COPYING.  If not, write to the
+    ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    ;; Boston, MA 02111-1307, USA.
+    
+    ;;; Commentary:
+    
+    ;; This code lets you run asynchonous processes that display in the RP
+    ;; bar. For example, you can use the bar to display a ticking clock.
+    ;;
+    ;; In fact, there is nothing to prevent you from using the code here
+    ;; to run other kinds of asynchronous processes. The code could be
+    ;; trivially rewritten so that `start-ratclock' was called
+    ;; `run-asynchronously'.  But the function so-defined probably
+    ;; wouldn't be useful for much.  All truly ratpoison-specific code is
+    ;; in the accompanying file run-ratclock.el.
+    ;;
+    ;; It would be good to provide a way for the `ratclock' command to be
+    ;; used by outside programs e.g. so that you could toggle the clock on
+    ;; and off from within ratpoison by running ":ratclock".  Probably
+    ;; emacsclient is the way to go.  This could provide a cheap way to do
+    ;; "Embedded Emacs" for Ratpoison.
+    
+    ;;; Code:
+    
+    (defvar ratclock-clock-on nil)
+    
+    (defvar ratclock-bargravity "se")
+    
+    ;; How to get asynchronous behavior for real?  (I guess wait for some
+    ;; later version of Emacs?)  This way is just sort of annoying.
+    ;; Instead of a shell command, we could have a call that returns a
+    ;; thread id that could be used to e.g. kill that thread off later.
+    ;;
+    ;; One specific detail that I would like to change would be to have no
+    ;; message about the abnormal exit of that emacs.  Should be easy
+    ;; enough to do with options to `shell-command', right??
+    ;;
+    ;; Another approach would probably be to use Emacsclient and issue the
+    ;; `kill-emacs' command from within the "inferior" emacs that has been
+    ;; started here.  (Which gives me another idea: is it possible to run
+    ;; an emacs lisp interpreter as a legitimate inferior process, like
+    ;; you can run CLISP for example?  I guess you could use the *scratch*
+    ;; buffer for this purpose, but that seems sort of dumb.)
+    (defun ratclock ()
+      "Toggle the display of a ticking clock in the ratpoison message bar."
+      (interactive)
+      (if ratclock-clock-on
+          (kill-ratclock)
+        (start-ratclock "ratclock")))
+    
+    (defun ratyow ()
+      "Toggle the display of random zippyisms in the bar.
+    The bar's gravity is also randomized for each new zippyism, but
+    returns to the usual setting when `ratyow' is turned off."
+      (interactive)
+      (if ratclock-clock-on
+          ;; turn it off
+          (progn
+            (ratpoison-defbargravity ratclock-bargravity)
+            (kill-ratclock))
+        (setq ratclock-bargravity (ratpoison-defbargravity))
+        (start-ratclock "ratyow")))
+    
+    (defun start-ratclock (style)
+      "Turn on ratclock, in given STYLE."
+      ;; we need to do something to deal with the "*Async Shell Command*"
+      ;; buffer that pops up.  This is simple and seems to work fine.  On
+      ;; a faster machine it might not work (?).  One should be able to
+      ;; tell `shell-command' *not* to pop up the buffer; this doesn't
+      ;; appear to be readily possible.  A "missing feature" bug in Emacs
+      ;; I think.
+      (let ((winconf (current-window-configuration)))
+        (shell-command (concat "emacs -batch -q --no-site-file "
+                               "-l /Users/arided/site-lisp/run-ratclock.el "
+                               "-f run-" style 
+                               " &") nil)
+        (set-window-configuration winconf)
+        (kill-buffer "*Async Shell Command*")
+        (setq ratclock-clock-on t)))
+    
+    (defun kill-ratclock ()
+      "Turn off ratclock."
+      (with-temp-buffer
+        (setq ratclock-clock-on nil)
+        (insert (shell-command-to-string "ps -w -w"))
+        (goto-char (point-min))
+        (when (search-forward-regexp 
+               ;; identify the process ID of the run-ratclock.el-associated process
+               "\\s-\\([0-9]*\\).*[0-9][0-9] emacs.*run-ratclock.*" nil t)
+          ;; kill the processes
+          (shell-command (concat "kill -KILL " (match-string 1))))))
+    
+    ;;; ratclock.el ends here
+    
+    ;;; run-ratclock.el -- core functions for `ratclock'
+    
+    ;; Copyright (C) 2004 Joe Corneli <jcorneli@math.utexas.edu>
+    
+    ;; Time-stamp: <jac -- Sun Oct 10 18:19:35 CDT 2004>
+    
+    ;; This file is not part of GNU Emacs, but it is distributed under
+    ;; the same terms as GNU Emacs.
+    
+    ;; GNU Emacs is free software; you can redistribute it and/or modify
+    ;; it under the terms of the GNU General Public License as published
+    ;; by the Free Software Foundation; either version 2, or (at your
+    ;; option) any later version.
+    
+    ;; GNU Emacs is distributed in the hope that it will be useful,
+    ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ;; GNU General Public License for more details.
+    
+    ;; You should have received a copy of the GNU General Public License
+    ;; along with GNU Emacs; see the file COPYING.  If not, write to the
+    ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    ;; Boston, MA 02111-1307, USA.
+    
+    ;;; Commentary:
+    
+    ;; I tried to have the same file (ratclock.el) be reloaded by the
+    ;; "inferior" emacs process called in `ratclock', but that didn't work
+    ;; out, so I'm breaking the core functionality off into this separate
+    ;; file.
+    
+    ;;; Code:
+    
+    
+    (load "/Users/arided/site-lisp/ratpoison.el")
+    (load "/Users/arided/site-lisp/ratpoison-cmd.el")
+    
+    (defun run-ratclock ()
+      (while t
+        (ratpoison-echo (current-time-string))
+        (sleep-for 1)))
+    
+    (defun run-ratyow ()
+      (while t
+        (ratpoison-defbargravity (1+ (random 9)))
+        (ratpoison-echo (with-temp-buffer (yow t nil)
+                                          (let ((fill-column 30))
+                                            (fill-region (point-min) (point-max)))
+                                          (buffer-string)))
+        (sleep-for 3)))
+    
+    ;; run-ratclock.el ends here

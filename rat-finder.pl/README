@@ -1,0 +1,13 @@
+find and browse files in your hd with ratmenus
+
+http://raimonster.googlepages.com/rat-finder.pl
+
+Creates a database with your files (~/ default) when you input 'gen' as extension.
+
+Browses your db and shows a ratmen with all files having desired pattern and extension. The first time an extension is given, asks for an app to open files with.
+
+Please comment, and if you edit it, paste the code here :). Should I put the complete code here in the wiki? (~200 lines)
+
+This script is a must-use!!! Nbx-cmD
+
+by Kidd

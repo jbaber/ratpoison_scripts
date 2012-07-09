@@ -1,0 +1,7 @@
+#!/bin/sh 
+FH=/tmp/rpcat$(date +%s)$UID$$.tmp;cat &gt; $FH &lt;&lt; EOF
+
+#colon-commands go here.
+
+EOF
+ratpoison -c "source $FH"; rm -f "$FH"

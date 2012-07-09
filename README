@@ -1,0 +1,56 @@
+Many of these scripts contain original errors and
+errors of transcription by me.  Fix, expand, fork.
+Be ruthless!
+
+The collection of ratpoison scripts hosted at
+http://ratpoison.wxcvbn.org/cgi-bin/wiki.pl/Scripts
+
+To quote that page:
+       Extensions to ratpoison in scripts or colon-commands.
+       A good script should be:
+           Useful.
+           Portable.
+           Clear and concise.
+       If you can't figure out how to do what you want to do by calling
+       existing programs, perhaps your idea would be better implemented
+       as one or several Patches, or by writing a new program.
+       
+Notes
+---
+- A few groups of scripts try to accomplish the same
+  thing in the same way.  They should be combined
+  into a single script.
+
+- Some "scripts" are bundled as .tar.gz archives.  I
+  don't know enough to untar them and organize them
+  as proper directories.  Please feel free to do so.
+
+- lost subdirectory
+  - These scripts may have disappeared forever.
+
+- obsolete subdirectory
+  - scripts marked obsolete in the wiki
+
+- deprecated subdirectory
+  - scripts marked deprecated in the wiki
+
+- not_a_script_as_such
+  - These files contain the makings of a script that
+    should be transformed into a working script or
+    just lists of instructions and other weirdness.
+
+- Each script has its own subdirectory containing the
+  collection of scripts and a README.  Feel free to
+  reorganize it.
+
+- Errors (please fix any and all and submit your commit!)
+  Always refer to the original at
+  http://ratpoison.wxcvbn.org/cgi-bin/wiki.pl/Scripts to
+  see the author's original intent.
+  - Fetching these scripts may have introduced spurious initial
+    spaces including at the #! line at the top and other
+    strange results of downloading over http
+  - Many of these scripts were broken as they stood in the wiki.
+  - Some author attributions may be missing.
+  - "Updated date" from the wiki is not in the README for any of
+     them.

@@ -1,0 +1,11 @@
+Push and pop frames (using fdump/frestore) to a stack.
+
+Add to your .ratpoisonrc
+
+    alias pushframe exec ratpoison -c fdump >> /tmp/ratpoisonframes
+
+    alias popframe exec ratpoison -c "frestore `tail -n 1 /tmp/ratpoisonframes`" && head -n -1 /tmp/ratpoisonframes | cat | cat > /tmp/ratpoisonframes
+
+Works like you would think.
+
+by ErikHetzner

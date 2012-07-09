@@ -1,0 +1,7 @@
+#!/bin/sh
+
+NAME=$1
+KEY=$2
+
+ratpoison -c "gnewbg $NAME"
+ratpoison -c "bind $KEY exec ratpoison -c \"gselect $NAME\" -c \"select -\" -c other -c 'echo Now in \"$NAME\" group'"

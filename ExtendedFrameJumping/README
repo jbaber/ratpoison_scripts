@@ -1,0 +1,5 @@
+Jump to the specified application.
+
+Since the command for switching to the last used window is probably the one I use the most in ratpoison, I made this script to be able to use similar commands to switch to the last used instance of a given program. If there are no instances of the particular program running, it starts one.
+
+by bkhl

@@ -1,0 +1,8 @@
+#!/usr/bin/env perl
+my @fdump = split /,/, `ratpoison -c fdump`;
+my $curframe = `ratpoison -c curframe`;
+chomp $curframe;
+shift @fdump while $fdump[0] !~ /:number $curframe/;
+my ($w,$h)=($fdump[0] =~ /:width (\d+) :height (\d+)/);
+my $cmd = ($h>$w) ? 'split' : 'hsplit';
+exec "ratpoison -c $cmd";

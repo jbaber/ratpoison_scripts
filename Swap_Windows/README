@@ -1,0 +1,35 @@
+Swap the windows in two frames
+
+This script will swap the window in the current frame with the window in a frame that you select interactively.
+
+Substitute focusdown (or up / left / right) for fselect to swap in a particular direction. Substitute focuslast to swap the contents of the two most recently used frames.
+
+The following C code does the same thing, but much faster.
+
+static char *
+cmd_swap (int interactive, char *data)
+{
+  rp_frame *curr_frame, *last_frame;
+  rp_window *window;
+
+  last_frame = find_last_frame();
+  curr_frame = current_frame();
+  window = current_window();
+
+  if (NULL == last_frame
+      || NULL == curr_frame
+      || NULL == window)
+    return NULL;
+
+  blank_frame (curr_frame);	/* select - */
+  set_active_frame (last_frame); /* focuslast */
+  set_active_window (window);	/* other */
+  set_active_frame (curr_frame); /* focuslast */
+
+  window = group_last_window (rp_current_group, current_screen());
+  set_active_window (window); /* other */
+
+  return NULL;
+}
+
+by sabetts

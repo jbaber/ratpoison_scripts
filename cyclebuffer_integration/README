@@ -1,0 +1,5 @@
+Use ratpoison to manage Emacs buffers.
+
+This code needs the Ratpoison-Emacs expansion pack as well as cyclebuffer.el. The point is to use the bar to list the buffers and then flip between Emacs buffers in the same way you flip between X-managed windows. Eventually I hope to add all the same features we're used to in RP (backlighting, select buffer by number, ...?).
+
+by jcorneli

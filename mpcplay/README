@@ -1,0 +1,5 @@
+Display your current MPD playlist through ratmen 		
+
+A simple script that uses ratmen to display the current MPD playlist via mpc, with the current song highlighted. Of course, you can select songs too ;)
+
+by finferflu

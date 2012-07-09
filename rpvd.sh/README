@@ -1,0 +1,32 @@
+Ratpoison virtual desktops: Manages groups and frame layouts
+
+--------------------------------------------------------------------------------
+ update: Tue Jun 26 11:56:56 EDT 2012
+ this script suffers from "bashisms" apparently due to the /bin/sh (dash)
+ replacement that has occured in debian gnu/linux i plan on fixing these in the
+ not too distant future :) any comments and/or questions you may find me
+ (nick: emss) at irc.freenode.net in #ratpoison
+ --------------------------------------------------------------------------------
+ Version: 0.06.2
+  rpvd.sh should now be POSIX compliant (maybe?)
+  no longer dependent on bash
+  uses POSIX Bourne/SH, POSIX awk, and ratpoison
+ 
+ Description: Ratpoison virtual desktop(s)?
+  Manages ratpoison groups and the frame layouts for those groups
+  rpvd.sh is capable of saving and restoring groups and frame layouts
+  For help on how to utilize rpvd.sh, run 'sh rpvd.sh -h'
+
+ Please let me know if you find any bugs, or have any
+ + ideas or suggestions on ways to improve rpvd.sh
+ 
+ Would be nice to know if anyone actually uses this script,
+ + besides myself of course :)
+
+ You may find me (nick: emss) at irc.freenode.net in #ratpoison
+
+ Thanks, and have a wonderful day :)
+
+ rpvd.sh is now 515 lines, MD5 (rpvd.sh) = a68112a5b630bf130a714b5d4e21c9a4
+
+by emss

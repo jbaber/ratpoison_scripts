@@ -1,0 +1,118 @@
+Toss window to target frame.
+
+Toss is a perl script to toss a window in the current frame to a target frame specified by directions like up, down, left, or right. Also it can grab window from target frame and follow the toss to the target frame.
+
+#!/usr/bin/perl
+
+use strict;
+
+# Hash of command line directionals.
+my %cmd_hash = (
+                  up      => "up",
+                  k       => "up",
+                  north   => "up",
+                  down    => "down",
+                  j       => "down",
+                  south   => "down",
+                  left    => "left",
+                  h       => "left",
+                  west    => "left",
+                  right   => "right",
+                  l       => "right",
+                  east    => "right"
+               );
+
+# House -c's for where we are tossing or grabbing.
+my $move;
+
+# Boolean to determine if we grab or toss.
+my $grab = grep { /^grab$/ } @ARGV;
+
+# Boolean to determine if we follow or stay.
+my $go   = grep { /^go$/ } @ARGV;
+
+# Build $move
+foreach ( @ARGV ) {
+    $move .= " -c focus" . $cmd_hash{$_} if $cmd_hash{$_};
+}
+
+# Get current windows command format, so we can return to it.
+my $of = `ratpoison -c defwinfmt`;
+chomp $of;
+
+# Define new windows command format.
+my $nf = '%n %s %i';
+
+# Get windows command info while in current frame.
+my @cw = map {[split]} `ratpoison -c 'defwinfmt $nf' -c windows`;
+
+# Get windows command info while in target frame.
+my @mw = map {[split]} `ratpoison $move -c windows`;
+
+# Get fdump and restore old windows command format.
+my $f = `ratpoison -c 'fdump' -c 'defwinfmt $of'`;
+chomp $f;
+my @f = map {[split]} split(",", $f);
+
+# Determine which windows are in the current frame and target frame.
+my ( $cw ) = grep { $_->[1] =~ /\*/ } @cw;
+my ( $mw ) = grep { $_->[1] =~ /\*/ } @mw;
+$cw = $cw->[2];
+$mw = $mw->[2];
+
+# Determine next window in window stack.
+my @nosee = grep { my $id = $_; ! ( scalar grep { $_->[5] == $id } @f ) } map { $_->[2] } @cw;
+
+# House frame number of frame to select.
+my $fs;
+
+# Magic! or manipulate fdump for our purposes.
+foreach ( @f ) {
+    if ( $_->[5] == $mw ) {
+        $fs = $_->[0] if $go;
+        $_->[5] = $grab ? shift @nosee : $cw;
+        $_->[5] ||= 0 if $grab;
+        next;
+    }
+    if ( $_->[5] == $cw ) {
+        $fs = $_->[0] unless $go;
+        $_->[5] = $grab ? $mw : shift @nosee;
+        $_->[5] ||= 0 unless $grab;
+        next;
+    }
+}
+
+# Re-compile fdump.
+my $fdump = join(",",map {join(" ",@$_)} @f).",";
+
+# Restore fdump and select frame.
+`ratpoison -c "frestore $fdump" -c "fselect $fs"`;
+
+########################
+__END__
+
+=head1 toss
+
+script that tosses windows from current frame to target frame, or grabs from target frame.
+
+=head1 Arguments
+
+    h, left,  or west  all mean left.
+    k, up,    or north all mean up.
+    j, down,  or south all mean down.
+    l, right, or east  all mean right.
+
+    grab means grab instead of toss.
+
+    go means goto target frame instead of staying in current frame.
+
+=head1 Examples
+
+    toss right           toss window in current frame to frame to the right
+    toss grab right      grab window in frame one to the right
+    toss left go         toss window in current frame to frame to the left and                    
+                         go to that frame
+    toss down left down left grab   grab window in frame that is down, left,
+                                    down, then left
+
+by sslvh

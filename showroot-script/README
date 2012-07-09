@@ -1,0 +1,12 @@
+Show the root window.
+
+The showroot command shows the root window. The unshowroot command puts the windows back how they were.
+
+Here FOO is an arbitrary file name that you should supply, for instance, $HOME/.rpfdump.
+
+---
+What are some examples of useful things to put in your root window?
+
+    XPhoon ( http://xphoon.sourceforge.net/ ) is an essential for lycanthropes.
+
+by twb

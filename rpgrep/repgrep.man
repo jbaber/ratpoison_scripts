@@ -1,0 +1,52 @@
+NAME
+    rpgrep - make ratpoison switch to a window with a matching pattern
+
+SYNOPSIS
+    rpgrep [pattern]
+
+DESCRIPTION
+    A more powerful replacement for ratpoison's built-in select command:
+    Search for a regular expression in the title of a window managed by the
+    ratpoison X11 window manager and let ratpoison switch to the next
+    matching window.
+
+    If called without arguments, the last search will be repeated and, if
+    there are multiple windows with matching titles, the next found window
+    will be switched to.
+
+    The current search pattern gets stored in the ratpoison environment
+    variable searchstring. By this, the search can be repeated the next time
+    rpgrep is being called up non-interactively. searchstring has the format
+    pattern-window number+window number+window number...
+
+EXAMPLES
+  Usage on the commandline:
+    rpgrep *foo*
+
+    Makes ratpoison switch to the first window which contains *foo* in its
+    title string.
+
+    rpgrep
+
+    If used after rpgrep *foo*, makes ratpoison switch to the next window
+    which contains *foor* in its title string.
+
+  Usage within ratpoison:
+    bind z colon exec rpgrep[space]
+
+    To bind rpgrep to the ratpoison key C-t+z and enter the search pattern
+    interactively on the ratpoison command prompt.
+
+    bind Z exec rpgrep
+
+    To repeat the search and cycle through matching windows by pressing
+    C-t+Z.
+
+LICENSE
+    GNU General Public License, http://www.gnu.org/copyleft/gpl.html
+
+AUTHOR
+    Florian Cramer <cantsin@zedat.fu-berlin.de>
+
+RELEASE
+    0.9, August 2004

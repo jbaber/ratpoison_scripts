@@ -1,0 +1,9 @@
+Karamba / GDesklets equivalent.
+
+gdesklets and (super)karamba are clones of OS X's konfabulator.
+
+The idea -- don't shuffle status monitors in with Real windows -- is good, but the implementation is more about eye-candy than efficiency.
+
+With a bit of work, you can do something similar with xvt
+
+by twb

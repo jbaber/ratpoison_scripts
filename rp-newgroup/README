@@ -1,0 +1,14 @@
+Create a group along with a hotkey for easy switching
+
+This simple script creates a new group (first parameter) and binds a key (the second parameter) to a command which switches to the group. I use it like this in my .ratpoisonrc:
+
+  exec rp-newgroup emacs F9
+  exec rp-newgroup term  F10
+  exec rp-newgroup web   F11
+
+This allows me to quickly switch between a bunch of Emacs windows (C-t F9), a bunch of terminals (C-t F10), and various web-related windows (C-t F11). In practice this feels a bit like having separate, named desktops.
+
+Note that this does not store frame configuration separately for each group. This allows me to keep gkrellm in its own dedicated frame while using the majority of the screen for the current window.
+
+
+by jpl

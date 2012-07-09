@@ -1,0 +1,4 @@
+alias showroot exec ratpoison -c fdump > FOO; ratpoison -c 'select -' -c only
+alias unshowroot exec ratpoison -c "frestore `cat FOO`"
+bind B showroot
+bind M-B unshowroot

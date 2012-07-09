@@ -1,0 +1,5 @@
+Split current frame horizontally if it's wide and vertically if it's tall
+
+I've bound 's' to exec rpsplit instead of just to split so it does what I want whether I'm in a tall or a wide window.
+
+by ZedLopez

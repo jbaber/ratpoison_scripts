@@ -1,0 +1,21 @@
+	alias BROWSER exec exec $BROWSER
+	newkmap set-browser
+	definekey set-browser d setenv BROWSER dillo
+	definekey set-browser g setenv BROWSER galeon --new-tab
+	definekey set-browser w setenv BROWSER $TERM -T "$BROWSER" -e w3m
+	definekey set-browser l setenv BROWSER $TERM -T "$BROWSER" -e links
+	# more browsers...
+	
+	newkmap browser
+	definekey browser f exec ratpoison -c 'setenv URL http://freshmeat.net/'                                 -c 'colon BROWSER ${URL}'
+	definekey browser s exec ratpoison -c 'setenv URL http://google.com.au/search?q='                        -c 'colon BROWSER ${URL}'
+	definekey browser l exec ratpoison -c 'setenv URL http://google.com.au/linux?q='                         -c 'colon BROWSER ${URL}'
+	definekey browser w exec ratpoison -c 'setenv URL http://en.wikipedia.org/wiki/Special:Search?search='   -c 'colon BROWSER ${URL}'
+	# more interactive links...
+	
+	definekey browser r       BROWSER http://ratpoison.elektrubadur.se
+	definekey browser slash   BROWSER slashdot.org
+	# more static links...
+	
+	bind D readkey set-browser
+	bind d readkey browser

@@ -1,0 +1,5 @@
+A configurable C program that allows you to switch applications in an Apple Expose-ish way
+
+RpExpose is a graphical task switcher for Ratpoison (as well as other window managers). RpExpose has a thumbnail command that you can configure your ratpoisonrc to call every time a window is switched. The select feature of RpExpose gives you a window with the thumbnails of all of your open windows and allows you to switch between them using user definable key bindings. The program can be configured from your rpexposerc script in you home directory.
+
+by Chaosgame

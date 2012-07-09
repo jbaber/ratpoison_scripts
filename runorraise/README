@@ -1,0 +1,11 @@
+switch to an app if it exists, launch it if it doesn't 
+
+This takes an application class and (optionally) a command as arguments. If there are any open windows of that class (matched case insensitively), it selects the most recently visited window, unless that's already the current window, in which case it switches to the next most recently visited one. If there aren't any open windows of the specified class, it execs the second arg, which defaults to a lower-case version of the class. The basic idea is lifted from ExtendedFrameJumping by bkhl. I used to be call this rpselect.
+
+Examples from my .ratpoisonrc:
+
+    bind e runorraise emacs editor
+    bind f runorraise firefox
+
+
+by ZedLopez

@@ -1,0 +1,5 @@
+A small notification script for irssi that makes use of "the bar"
+
+Script originally by Luke Macken for libnotify, modified for use with ratpoison's 'bar' by Igneous.
+
+by Igneous
