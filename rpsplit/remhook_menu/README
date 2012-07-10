@@ -1,5 +1,0 @@
-ratmenu menu to allow easy hook removal
-
-This takes the pain out of removing complicated hooks by presenting a ratmenu ( http://ratpoison.wxcvbn.org/cgi-bin/wiki.pl/ratmenu ) of what's been added for a given hook. This is an improved version that doesn't get tripped up by hooks containing characters that need escaping in the shell.
-
-by ZedLopez
