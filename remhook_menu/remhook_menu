@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+my @hook_list = (qw(key switchwin switchframe switchgroup switchscreen deletewindow quit restart newwindow titlechanged));
+my %hooks;
+@hooks{@hook_list} = (1) x scalar @hook_list;
+
+my $hook = shift;
+die "Usage: remhook [" . (join '|', @hook_list) . "]\n" unless ($hook and $hooks{$hook});
+my $ratpoison = `which ratpoison`;
+chomp $ratpoison;
+die "ratpoison not in PATH\n" unless $ratpoison;
+
+# fails if an \n is embedded in the body of a hook
+my @lines = split /\n/, `$ratpoison -c "listhook $hook" 2>/dev/null`;
+
+exec("ratmenu 'Nothing defined for $hook' 'cat /dev/null'") unless scalar @lines;
+
+my $pipeline = "xargs -0 ratmenu -shell $ratpoison";
+open(my $ph, "|$pipeline") or die "can't open pipe to $pipeline: $!";
+for (@lines) {
+  print $ph "$_\000";
+  print $ph "remhook $hook $_\000";
+}
+close($ph);
