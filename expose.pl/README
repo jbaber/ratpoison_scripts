@@ -1,0 +1,19 @@
+Duplicates OS-X 10.3's Expose' functionality for ratpoison.
+You should apply the TWBPatch or reverse the logic at line 43.
+
+Perl script which tiles all open windows next to each other and allows to select one of them. Think OS X's exposé.
+
+Todo:
+  Update to use current fdump format.
+  Rewrite in CL or scsh.
+
+  Due to e-mail obfuscation, line 46 should be:
+
+  my $ret = join(", ", &rp_split(\@xids, \&split, $n, \@r));
+
+  instead of what's on the file. -- [[buu?]]
+
+See also Skippy ( http://ratpoison.wxcvbn.org/cgi-bin/wiki.pl/Skippy )
+
+Maintainer: Trent Buck <[EMAIL PROTECTED]>
+License: Public Domain
