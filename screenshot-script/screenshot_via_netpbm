@@ -1,0 +1,10 @@
+#!/bin/ksh
+
+FH=xwd-$(date +%s)$$
+xwd -root > /tmp/$USER-$FH
+xwdtopnm /tmp/$USER-$FH > /tmp/$USER-$FH.pnm
+rm -f /tmp/$USER-$FH
+pnmtopng /tmp/$USER-$FH.pnm > $HOME/$USER-$FH.png
+rm -f /tmp/$USER-$FH.pnm
+
+# Just making it a runnable script.  JB
